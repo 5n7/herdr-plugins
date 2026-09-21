@@ -1,0 +1,27 @@
+id = "herdr-even-layout"
+name = "Herdr Even Layout"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Equalize pane widths and heights on pane creation, move, and close"
+platforms = ["linux", "macos"]
+
+[[startup]]
+command = ["./plugin"]
+
+[[events]]
+on = "pane.created"
+command = ["./plugin"]
+
+[[events]]
+on = "pane.moved"
+command = ["./plugin"]
+
+[[events]]
+on = "pane.closed"
+command = ["./plugin"]
+
+[[actions]]
+id = "even"
+title = "Even pane layout"
+contexts = ["global"]
+command = ["./plugin"]

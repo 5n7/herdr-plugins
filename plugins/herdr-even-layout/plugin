@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Source install: run the TypeScript entry with Bun from PATH.
+here=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+exec bun "$here/src/main.ts" "$@"
