@@ -3,12 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun build --target=bun plugins/herdr-even-layout/src/main.ts --outfile dist/herdr-even-layout/plugin.js",
-    "build:standalone": "bun build --compile --target=bun plugins/herdr-even-layout/src/main.ts --outfile dist/herdr-even-layout/plugin && bash scripts/sign-standalone.sh",
+    "build": "bash scripts/build-plugins.sh",
+    "build:standalone": "bash scripts/build-plugins.sh --compile && bash scripts/sign-standalone.sh",
     "check": "bun run format:check && bun run lint && bun run typecheck && bun run test && bun run build && bun run build:standalone && bun run smoke:standalone",
-    "format": "oxfmt --write . && mise exec -- shfmt -w plugins/herdr-even-layout/plugin scripts/sign-standalone.sh scripts/smoke-standalone.sh",
-    "format:check": "oxfmt --check . && mise exec -- shfmt -d plugins/herdr-even-layout/plugin scripts/sign-standalone.sh scripts/smoke-standalone.sh",
-    "lint": "oxlint --deny-warnings . && mise exec -- shellcheck --shell=bash plugins/herdr-even-layout/plugin scripts/sign-standalone.sh scripts/smoke-standalone.sh",
+    "format": "oxfmt --write . && bash scripts/sh-plugins.sh format",
+    "format:check": "oxfmt --check . && bash scripts/sh-plugins.sh format:check",
+    "lint": "oxlint --deny-warnings . && bash scripts/sh-plugins.sh lint",
     "smoke:standalone": "./scripts/smoke-standalone.sh",
     "test": "bun test",
     "typecheck": "tsc --noEmit"

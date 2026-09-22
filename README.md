@@ -17,12 +17,12 @@ mise installs the pinned Bun, shfmt, and ShellCheck executables. Bun installs th
 bun run check
 ```
 
-`bun run check` formats and lints the repository, checks types, and runs tests. It also builds the bundle and standalone binary, then verifies that the standalone binary fails when `HERDR_SOCKET_PATH` is unset.
+`bun run check` formats and lints the repository, checks types, and runs tests. It also builds a bundle and a standalone binary for every plugin, then verifies that each binary fails when `HERDR_SOCKET_PATH` is unset.
 
 ## Layout
 
 ```text
-packages/herdr-runtime/   shared JSON-RPC, pane notes, coalescing
+packages/herdr-runtime/   shared JSON-RPC, pane notes, coalescing, plugin host
 plugins/<plugin-id>/      herdr-plugin.toml, ./plugin, TypeScript sources
 ```
 
@@ -36,14 +36,14 @@ herdr plugin link ./plugins/herdr-even-layout --enabled
 
 ## Build outputs
 
-- `bun run build` writes `dist/herdr-even-layout/plugin.js`.
-- `bun run build:standalone` writes `dist/herdr-even-layout/plugin` for release testing on the current host.
+- `bun run build` writes `dist/<plugin-id>/plugin.js` for every plugin.
+- `bun run build:standalone` writes `dist/<plugin-id>/plugin` for every plugin on the current host.
 
 ## Add a plugin
 
-1. Create `plugins/<plugin-id>/` with a checked-in `herdr-plugin.toml` and `src/`.
-2. Reuse `packages/herdr-runtime` for socket RPC, pane notes, or coalescing.
-3. Add Bun build scripts when the plugin needs a distributable bundle or standalone binary.
+1. Create `plugins/<plugin-id>/` with `herdr-plugin.toml`, a `./plugin` launcher, and `src/main.ts`. Copy `./plugin` from an existing plugin.
+2. Start `src/main.ts` with `createPluginLog`, `requiredEnv`, `createHost`, and `runPlugin` from `packages/herdr-runtime`. Use the runtime for socket RPC, pane notes, and coalescing. Keep event routing and plugin behavior in the plugin.
+3. Build, signing, smoke tests, shfmt, and ShellCheck discover `plugins/*/herdr-plugin.toml`. Do not add the plugin id to `package.json`.
 4. Keep unit tests next to the modules they cover.
 
 ## Versioning
